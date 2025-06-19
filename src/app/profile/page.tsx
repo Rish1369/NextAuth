@@ -18,11 +18,27 @@ export default function userProfilePage({params}:any) {
       toast.error(error?.response?.data?.error || "Something went wrong");
     }
   };
+  const [data, setData] = React.useState<any>(null);
+  const getUser = async () =>{
+    try{
+      const response = await axios.get("/api/users/me");
+      console.log("User data:"  , response.data);
+      setData(response.data.data.email);
+      
+    }catch (error: any) {
+      console.error("Failed to fetch user data:", error);
+      toast.error(error?.response?.data?.error || "Something went wrong");
+  }
+}
   return (
   
     <div>
       <h2>Logout</h2>
       <p>Click the button below to logout.</p>
+      <p>User ID: {data? data : "NULL"}</p>
+      <button onClick={getUser} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300 cursor-pointer">
+        Get User Data
+      </button>
       <button onClick={logout} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors duration-300 cursor-pointer">
         Logout
       </button>
